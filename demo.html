@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>拖拽选择区域</title>
+    <style>
+        .hot-area-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .hot-area-img {
+            display: block;
+            width: 500px;
+            height: auto;
+        }
+
+        .hot-crop-box {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            box-sizing: border-box;
+            border: 1px solid #39f;
+            direction: ltr;
+            font-size: 0;
+            line-height: 0;
+            touch-action: none;
+            user-select: none;
+        }
+
+        .crop-box-content {
+            width: 100%;
+            height: 100%;
+            background-color: #2aa7ff;
+            opacity: .3;
+            cursor: move;
+        }
+
+        .cropper-point {
+            display: block;
+            position: absolute;
+            background-color: #39f;
+            height: 6px;
+            opacity: .75;
+            width: 6px;
+            box-sizing: border-box;
+        }
+
+        .cropper-point.point-e {
+             cursor: ew-resize;
+             margin-top: -3px;
+             right: -4px;
+             top: 50%;
+         }
+        .cropper-point.point-n {
+             cursor: ns-resize;
+             left: 50%;
+             margin-left: -3px;
+             top: -4px;
+         }
+        .cropper-point.point-w {
+             cursor: ew-resize;
+             left: -4px;
+             margin-top: -3px;
+             top: 50%;
+         }
+        .cropper-point.point-s {
+             bottom: -4px;
+             cursor: s-resize;
+             left: 50%;
+             margin-left: -3px;
+         }
+        .cropper-point.point-ne {
+             cursor: nesw-resize;
+             right: -4px;
+             top: -4px;
+         }
+        .cropper-point.point-nw {
+             cursor: nwse-resize;
+             left: -4px;
+             top: -4px;
+         }
+        .cropper-point.point-sw {
+             bottom: -4px;
+             cursor: nesw-resize;
+             left: -4px;
+         }
+        .cropper-point.point-se {
+             bottom: -4px;
+             right: -4px;
+             cursor: nwse-resize;
+         }
+    </style>
+</head>
+
+<body>
+
+<h1>拖拽选择区域</h1>
+
+<div class="hot-area-container" id="hotMap">
+
+    <img class="hot-area-img" src="img/ic_img_file_others.png">
+
+    <div class="hot-crop-box" id="hotBox" style="width:225px;height:64px;">
+        <div class="crop-box-content"></div>
+        <span class="cropper-point point-e" data-direct="e"></span>
+        <span class="cropper-point point-n" data-direct="n"></span>
+        <span class="cropper-point point-w" data-direct="w"></span>
+        <span class="cropper-point point-s" data-direct="s"></span>
+        <span class="cropper-point point-ne" data-direct="ne"></span>
+        <span class="cropper-point point-nw" data-direct="nw"></span>
+        <span class="cropper-point point-sw" data-direct="sw"></span>
+        <span class="cropper-point point-se" data-direct="se"></span>
+    </div>
+
+</div>
+
+
+<script src="./dragarea.js"></script>
+<script>
+    dragarea.init({
+        container: 'hotMap',
+        hotbox: 'hotBox'
+    });
+</script>
+
+</body>
+</html>
