@@ -124,7 +124,19 @@
 <script>
     dragarea.init({
         container: 'hotMap',
-        hotbox: 'hotBox'
+        hotbox: 'hotBox',
+        newcallback: function (area) {
+            console.log(area);
+        },
+        clickcallback: function (area) {
+            console.log('clickcallback', area);
+        },
+        dragpointcallback: function (area) {
+            console.log('dragpointcallback', area);
+        },
+        dragareacallback: function (area) {
+            console.log('dragareacallback', area);
+        }
     });
 </script>
 
