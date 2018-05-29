@@ -24,12 +24,17 @@
             right: 0;
             top: 0;
             box-sizing: border-box;
-            border: 1px solid #39f;
             direction: ltr;
             font-size: 0;
             line-height: 0;
             touch-action: none;
             user-select: none;
+        }
+        .hot-crop-box.active {
+            border: 1px solid #39f;
+        }
+        .hot-crop-box.active .cropper-point {
+            display: block;
         }
 
         .crop-box-content {
@@ -41,7 +46,7 @@
         }
 
         .cropper-point {
-            display: block;
+            display: none;
             position: absolute;
             background-color: #39f;
             height: 6px;
@@ -105,7 +110,7 @@
 
     <img class="hot-area-img" src="img/ic_img_file_others.png">
 
-    <div class="hot-crop-box" id="hotBox" style="width:225px;height:64px;">
+    <div class="hot-crop-box active" id="hotBox" style="width:225px;height:64px;">
         <div class="crop-box-content"></div>
         <span class="cropper-point point-e" data-direct="e"></span>
         <span class="cropper-point point-n" data-direct="n"></span>

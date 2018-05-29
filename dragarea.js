@@ -2,7 +2,7 @@
 * author: "oujizeng",
 * license: "MIT",
 * name: "dragarea.js",
-* version: "2.0.0"
+* version: "2.1.0"
 */
 
 (function (root, factory) {
@@ -22,9 +22,9 @@
     };
 
     function getScroll (scrollProp, offsetProp) {
-        // if (typeof global[offsetProp] !== 'undefined') {
-        //     return global[offsetProp];
-        // }
+        if (typeof window[offsetProp] !== 'undefined') {
+            return window[offsetProp];
+        }
         if (document.documentElement.clientHeight) {
             return document.documentElement[scrollProp];
         }
@@ -321,17 +321,29 @@
                         parseInt(newHotBox.style.height) < 20 && console.log('热区高度太小了，建议大于20px');
                     } else {
                         boxIdx++;
+                        container.querySelectorAll('.hot-crop-box').forEach(function (val) {
+                            val.classList.remove('active');
+                        });
+                        newHotBox.classList.add('active');
                         opt.newcallback && opt.newcallback(newHotBox)
                     }
                 }
 
                 // 是否拖动热区
                 if (dragAreaFlag) {
+                    container.querySelectorAll('.hot-crop-box').forEach(function (val) {
+                        val.classList.remove('active');
+                    });
+                    currentHotBox.classList.add('active');
                     opt.dragareacallback && opt.dragareacallback(currentHotBox)
                 }
 
                 // 是否拖动缩放
                 if (dragPointFlag) {
+                    container.querySelectorAll('.hot-crop-box').forEach(function (val) {
+                        val.classList.remove('active');
+                    });
+                    currentHotBox.classList.add('active');
                     opt.dragpointcallback && opt.dragpointcallback(currentHotBox)
                 }
 
@@ -352,6 +364,10 @@
             container.addEventListener('click', function (e) {
                 e.stopImmediatePropagation();
                 if (e.target.classList.contains('crop-box-content')) {
+                    container.querySelectorAll('.hot-crop-box').forEach(function (val) {
+                        val.classList.remove('active');
+                    });
+                    e.target.parentNode.classList.add('active');
                     opt.clickcallback && opt.clickcallback(e.target.parentNode)
                 }
             });
