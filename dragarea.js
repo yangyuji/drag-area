@@ -2,12 +2,14 @@
 * author: "oujizeng",
 * license: "MIT",
 * name: "dragarea.js",
-* version: "2.1.0"
+* version: "2.1.1"
 */
 
 (function (root, factory) {
     if (typeof module != 'undefined' && module.exports) {
         module.exports = factory();
+    } else if ( typeof define == 'function' && define.amd ) {
+        define( function () { return factory(); } );
     } else {
         root['dragarea'] = factory();
     }
@@ -93,7 +95,7 @@
                     var relativePosition = {
                         x: start.x - parseInt(usearea.left),
                         y: start.y - parseInt(usearea.top)
-                    }
+                    };
 
                     // 创建一个新热区
                     newHotBox = hotbox.cloneNode(true);
@@ -118,7 +120,7 @@
                             var move = {
                                 x: e.clientX - start.x,
                                 y: e.clientY - start.y
-                            }
+                            };
 
                             // 向左上移动
                             if (move.x < 0 && move.y <= 0) {
@@ -126,12 +128,12 @@
                                 var limit = {
                                     x: e.clientX < usearea.left ? usearea.left : e.clientX,
                                     y: e.clientY < usearea.top ? usearea.top : e.clientY
-                                }
+                                };
                                 // 应该移动距离
                                 var distance = {
                                     x: limit.x - start.x,
                                     y: limit.y - start.y
-                                }
+                                };
                                 // 随鼠标移动位置并放大
                                 newHotBox.style.left = relativePosition.x - Math.abs(distance.x) + 'px';
                                 newHotBox.style.top = relativePosition.y - Math.abs(distance.y) + 'px';
@@ -144,12 +146,12 @@
                                 var limit = {
                                     x: e.clientX < usearea.left ? usearea.left : e.clientX,
                                     y: e.clientY > usearea.top + usearea.height ? usearea.top + usearea.height : e.clientY
-                                }
+                                };
                                 // 应该移动距离
                                 var distance = {
                                     x: limit.x - start.x,
                                     y: limit.y - start.y
-                                }
+                                };
                                 // 随鼠标移动位置并放大
                                 newHotBox.style.left = relativePosition.x - Math.abs(move.x) > 0 ? relativePosition.x - Math.abs(move.x) + 'px' : '0px';
                                 newHotBox.style.width = Math.abs(distance.x) + 'px';
@@ -161,12 +163,12 @@
                                 var limit = {
                                     x: e.clientX > usearea.left + usearea.width ? usearea.left + usearea.width : e.clientX,
                                     y: e.clientY < usearea.top ? usearea.top : e.clientY
-                                }
+                                };
                                 // 应该移动距离
                                 var distance = {
                                     x: limit.x - start.x,
                                     y: limit.y - start.y
-                                }
+                                };
                                 // 随鼠标移动位置并放大
                                 newHotBox.style.top = relativePosition.y - Math.abs(move.y) > 0 ? relativePosition.y - Math.abs(move.y) + 'px' : '0px';
                                 newHotBox.style.width = Math.abs(distance.x) + 'px';
@@ -178,7 +180,7 @@
                                 var limit = {
                                     x: e.clientX > usearea.left + usearea.width ? usearea.left + usearea.width : e.clientX,
                                     y: e.clientY > usearea.top + usearea.height ? usearea.top + usearea.height : e.clientY
-                                }
+                                };
                                 // 随鼠标放大
                                 newHotBox.style.width = limit.x - start.x + 'px';
                                 newHotBox.style.height = limit.y - start.y + 'px';
@@ -191,13 +193,13 @@
                 if (target.classList.contains('crop-box-content')) {
 
                     // 相对页面当前位置
-                    var initPosition = getOffset(target.parentNode)
+                    var initPosition = getOffset(target.parentNode);
 
                     // 相对container当前位置
                     var startPosition = {
                         x: target.parentNode.style.left || getCss(target.parentNode, 'left'),
                         y: target.parentNode.style.top || getCss(target.parentNode, 'top')
-                    }
+                    };
 
                     // 鼠标移动限制
                     var limitArea = {
@@ -218,7 +220,7 @@
                             var movelimit = {
                                 x: e.clientX > limitArea.maxLeft ? limitArea.maxLeft : e.clientX < limitArea.minLeft ? limitArea.minLeft : e.clientX,
                                 y: e.clientY > limitArea.maxTop ? limitArea.maxTop : e.clientY < limitArea.minTop ? limitArea.minTop : e.clientY,
-                            }
+                            };
 
                             target.parentNode.style.left = parseInt(startPosition.x) + movelimit.x - start.x + 'px';
                             target.parentNode.style.top = parseInt(startPosition.y) + movelimit.y - start.y + 'px';
@@ -309,8 +311,6 @@
 
             document.addEventListener('mouseup', function(e) {
 
-                e.stopImmediatePropagation();
-
                 // 是否新增热区
                 if (addHotFlag) {
                     // 20可以通过陪参传入
@@ -325,7 +325,7 @@
                             val.classList.remove('active');
                         });
                         newHotBox.classList.add('active');
-                        opt.newcallback && opt.newcallback(newHotBox)
+                        opt.newcallback && opt.newcallback(newHotBox);
                     }
                 }
 
@@ -335,7 +335,7 @@
                         val.classList.remove('active');
                     });
                     currentHotBox.classList.add('active');
-                    opt.dragareacallback && opt.dragareacallback(currentHotBox)
+                    opt.dragareacallback && opt.dragareacallback(currentHotBox);
                 }
 
                 // 是否拖动缩放
@@ -344,7 +344,7 @@
                         val.classList.remove('active');
                     });
                     currentHotBox.classList.add('active');
-                    opt.dragpointcallback && opt.dragpointcallback(currentHotBox)
+                    opt.dragpointcallback && opt.dragpointcallback(currentHotBox);
                 }
 
                 flag = false;
@@ -362,13 +362,12 @@
             });
 
             container.addEventListener('click', function (e) {
-                e.stopImmediatePropagation();
                 if (e.target.classList.contains('crop-box-content')) {
                     container.querySelectorAll('.hot-crop-box').forEach(function (val) {
                         val.classList.remove('active');
                     });
                     e.target.parentNode.classList.add('active');
-                    opt.clickcallback && opt.clickcallback(e.target.parentNode)
+                    opt.clickcallback && opt.clickcallback(e.target.parentNode);
                 }
             });
         }
