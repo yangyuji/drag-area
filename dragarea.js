@@ -1,6 +1,7 @@
 /*
 * author: "oujizeng",
 * license: "MIT",
+* github: "https://github.com/yangyuji/drag-area",
 * name: "dragarea.js",
 * version: "2.1.1"
 */
