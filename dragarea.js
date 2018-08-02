@@ -20,11 +20,11 @@
         return document.getElementById(str);
     };
 
-    var getCss = function(o, key) {
+    var getCss = function (o, key) {
         return o.currentStyle ? o.currentStyle[key] : window.getComputedStyle(o, null)[key];
     };
 
-    function getScroll (scrollProp, offsetProp) {
+    var getScroll = function (scrollProp, offsetProp) {
         if (typeof window[offsetProp] !== 'undefined') {
             return window[offsetProp];
         }
@@ -34,7 +34,7 @@
         return document.body[scrollProp];
     }
 
-    var getOffset = function  (el) {
+    var getOffset = function (el) {
         var rect = el.getBoundingClientRect();
         return {
             left: rect.left + getScroll('scrollLeft', 'pageXOffset'),
@@ -66,7 +66,9 @@
                 e.stopImmediatePropagation();
 
                 // 获取可拖动范围
-                var usearea = getOffset(container);
+                var usearea = getOffset(container),
+                // 当前触发对象
+                    target = e.target;
 
                 //记录鼠标开始位置
                 start = {
@@ -76,9 +78,6 @@
 
                 // 标记本次鼠标按下
                 flag = true;
-
-                // 当前触发对象
-                var target = e.target;
 
                 // 禁止选择事件
                 document.onselectstart = function() {
