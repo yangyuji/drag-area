@@ -116,7 +116,7 @@
 
                     // 创建一个新热区
                     newHotBox = hotbox.cloneNode(true);
-                    newHotBox.dataset.index = boxIdx;
+                    newHotBox.dataset['index'] = boxIdx;
                     newHotBox.style.width = '0px';
                     newHotBox.style.height = '0px';
                     newHotBox.style.left = relativePosition.x + 'px';
@@ -132,6 +132,9 @@
                             addHotFlag = true;
                             // 显示热区
                             newHotBox.style.display = 'block';
+                            // 移除其他框的active
+                            removeOtherActive();
+                            newHotBox.classList.add('active');
                             // 实际移动距离
                             var move = {
                                 x: e.clientX - start.x,
@@ -232,6 +235,9 @@
                             // 拖动热区标签
                             dragAreaFlag = true;
                             currentHotBox = drag.parentNode;
+                            // 移除其他框的active
+                            removeOtherActive();
+                            currentHotBox.classList.add('active');
 
                             // 热区拖动限制
                             var movelimit = {
@@ -338,29 +344,17 @@
                         parseInt(newHotBox.style.height) < 20 && console.log('热区高度太小了，建议大于20px');
                     } else {
                         boxIdx++;
-                        container.querySelectorAll('.hot-crop-box').forEach(function (val) {
-                            val.classList.remove('active');
-                        });
-                        newHotBox.classList.add('active');
                         opt.newcallback && opt.newcallback(newHotBox);
                     }
                 }
 
                 // 是否拖动热区
                 if (dragAreaFlag) {
-                    container.querySelectorAll('.hot-crop-box').forEach(function (val) {
-                        val.classList.remove('active');
-                    });
-                    currentHotBox.classList.add('active');
                     opt.dragareacallback && opt.dragareacallback(currentHotBox);
                 }
 
                 // 是否拖动缩放
                 if (dragPointFlag) {
-                    container.querySelectorAll('.hot-crop-box').forEach(function (val) {
-                        val.classList.remove('active');
-                    });
-                    currentHotBox.classList.add('active');
                     opt.dragpointcallback && opt.dragpointcallback(currentHotBox);
                 }
 
@@ -381,14 +375,19 @@
             container.addEventListener('click', function (e) {
                 var boxCnt = getBoxContent(e.target);
                 if (boxCnt) {
-                    var allBox = container.querySelectorAll('.hot-crop-box');
-                    for(var i = 0; i < allBox.length; i++) {
-                        allBox[i].classList.remove('active');
-                    }
+                    // 移除其他框的active
+                    removeOtherActive();
                     boxCnt.parentNode.classList.add('active');
-                    opt.clickcallback && opt.clickcallback(e.target.parentNode);
+                    opt.clickcallback && opt.clickcallback(boxCnt.parentNode);
                 }
             });
+
+            function removeOtherActive() {
+                var allBox = container.querySelectorAll('.hot-crop-box');
+                for(var i = 0; i < allBox.length; i++) {
+                    allBox[i].classList.remove('active');
+                }
+            }
         }
     };
 
