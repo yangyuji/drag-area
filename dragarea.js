@@ -1,4 +1,4 @@
-/*
+/**
 * author: "oujizeng",
 * license: "MIT",
 * github: "https://github.com/yangyuji/drag-area",
@@ -15,6 +15,7 @@
         root['dragarea'] = factory();
     }
 }(this, function () {
+    'use strict'
 
     var getEle = function (str) {
         return document.getElementById(str);
@@ -99,7 +100,6 @@
 
                     // 创建一个新热区
                     newHotBox = hotbox.cloneNode(true);
-                    newHotBox.id = '';
                     newHotBox.dataset.index = boxIdx;
                     newHotBox.style.width = '0px';
                     newHotBox.style.height = '0px';
