@@ -3,7 +3,7 @@
 * license: "MIT",
 * github: "https://github.com/yangyuji/drag-area",
 * name: "dragarea.js",
-* version: "2.1.1"
+* version: "2.1.2"
 */
 
 (function (root, factory) {
@@ -33,6 +33,22 @@
             return document.documentElement[scrollProp];
         }
         return document.body[scrollProp];
+    }
+
+    var getBoxContent = function (target) {
+        var boxContent = null, parent = target.parentNode;
+        // 获取标记的拖动元素
+        if (target.classList.contains('crop-box-content')) {
+            boxContent = target;
+        }
+        while(parent && boxContent == null) {
+            if (parent.classList && parent.classList.contains('crop-box-content')) {
+                boxContent = parent;
+            } else {
+                parent = parent.parentNode;
+            }
+        }
+        return boxContent
     }
 
     var getOffset = function (el) {
@@ -189,16 +205,17 @@
                     }
                 }
 
+                var drag = getBoxContent(target);
                 // 拖动热区
-                if (target.classList.contains('crop-box-content')) {
+                if (drag) {
 
                     // 相对页面当前位置
-                    var initPosition = getOffset(target.parentNode);
+                    var initPosition = getOffset(drag.parentNode);
 
                     // 相对container当前位置
                     var startPosition = {
-                        x: target.parentNode.style.left || getCss(target.parentNode, 'left'),
-                        y: target.parentNode.style.top || getCss(target.parentNode, 'top')
+                        x: drag.parentNode.style.left || getCss(drag.parentNode, 'left'),
+                        y: drag.parentNode.style.top || getCss(drag.parentNode, 'top')
                     };
 
                     // 鼠标移动限制
@@ -214,16 +231,16 @@
                         if (flag) {
                             // 拖动热区标签
                             dragAreaFlag = true;
-                            currentHotBox = target.parentNode;
+                            currentHotBox = drag.parentNode;
 
                             // 热区拖动限制
                             var movelimit = {
                                 x: e.clientX > limitArea.maxLeft ? limitArea.maxLeft : e.clientX < limitArea.minLeft ? limitArea.minLeft : e.clientX,
-                                y: e.clientY > limitArea.maxTop ? limitArea.maxTop : e.clientY < limitArea.minTop ? limitArea.minTop : e.clientY,
+                                y: e.clientY > limitArea.maxTop ? limitArea.maxTop : e.clientY < limitArea.minTop ? limitArea.minTop : e.clientY
                             };
 
-                            target.parentNode.style.left = parseInt(startPosition.x) + movelimit.x - start.x + 'px';
-                            target.parentNode.style.top = parseInt(startPosition.y) + movelimit.y - start.y + 'px';
+                            drag.parentNode.style.left = parseInt(startPosition.x) + movelimit.x - start.x + 'px';
+                            drag.parentNode.style.top = parseInt(startPosition.y) + movelimit.y - start.y + 'px';
                         }
                     }
                 }
@@ -362,11 +379,13 @@
             });
 
             container.addEventListener('click', function (e) {
-                if (e.target.classList.contains('crop-box-content')) {
-                    container.querySelectorAll('.hot-crop-box').forEach(function (val) {
-                        val.classList.remove('active');
-                    });
-                    e.target.parentNode.classList.add('active');
+                var boxCnt = getBoxContent(e.target);
+                if (boxCnt) {
+                    var allBox = container.querySelectorAll('.hot-crop-box');
+                    for(var i = 0; i < allBox.length; i++) {
+                        allBox[i].classList.remove('active');
+                    }
+                    boxCnt.parentNode.classList.add('active');
                     opt.clickcallback && opt.clickcallback(e.target.parentNode);
                 }
             });
