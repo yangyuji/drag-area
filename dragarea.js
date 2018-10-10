@@ -3,7 +3,7 @@
 * license: "MIT",
 * github: "https://github.com/yangyuji/drag-area",
 * name: "dragarea.js",
-* version: "2.1.2"
+* version: "2.1.3"
 */
 
 (function (root, factory) {
@@ -253,13 +253,15 @@
 
                 // 拖动边框
                 if (target.classList.contains('cropper-point')) {
+                    // 当前热区框
+                    currentHotBox = target.parentNode;
 
                     // 相对container当前位置
                     var initAttr = {
-                        width: target.parentNode.style.width || getCss(target.parentNode, 'width'),
-                        height: target.parentNode.style.height || getCss(target.parentNode, 'height'),
-                        left: target.parentNode.style.left || getCss(target.parentNode, 'left'),
-                        top: target.parentNode.style.top || getCss(target.parentNode, 'top'),
+                        width: currentHotBox.style.width || getCss(currentHotBox, 'width'),
+                        height: currentHotBox.style.height || getCss(currentHotBox, 'height'),
+                        left: currentHotBox.style.left || getCss(currentHotBox, 'left'),
+                        top: currentHotBox.style.top || getCss(currentHotBox, 'top'),
                         direct: target.dataset.direct || 'se'
                     };
 
@@ -268,7 +270,7 @@
                         if (flag) {
                             // 拖动缩放标签
                             dragPointFlag = true;
-                            currentHotBox = target.parentNode;
+
                             // 鼠标移动距离
                             var moveArea = {
                                 x: e.clientX > usearea.left + usearea.width ? usearea.left + usearea.width - start.x : e.clientX < usearea.left ? usearea.left - start.x : e.clientX - start.x,
@@ -276,55 +278,55 @@
                             }
                             if (initAttr.direct == 'e') {
                                 var nowW = parseInt(initAttr.width) + parseInt(moveArea.x);
-                                target.parentNode.style.width = nowW + 'px';
+                                currentHotBox.style.width = nowW + 'px';
                             }
                             if (initAttr.direct == 's') {
                                 var nowH = parseInt(initAttr.height) + parseInt(moveArea.y);
-                                target.parentNode.style.height = nowH + 'px';
+                                currentHotBox.style.height = nowH + 'px';
                             }
                             if (initAttr.direct == 'w') {
                                 var nowW = parseInt(initAttr.width) - parseInt(moveArea.x);
                                 var offLeft = parseInt(initAttr.left) + parseInt(moveArea.x);
-                                target.parentNode.style.width = nowW + 'px';
-                                target.parentNode.style.left = offLeft + 'px';
+                                currentHotBox.style.width = nowW + 'px';
+                                currentHotBox.style.left = offLeft + 'px';
                             }
                             if (initAttr.direct == 'n') {
                                 var nowH = parseInt(initAttr.height) - parseInt(moveArea.y);
                                 var offTop = parseInt(initAttr.top) + parseInt(moveArea.y);
-                                target.parentNode.style.height = nowH + 'px';
-                                target.parentNode.style.top = offTop + 'px';
+                                currentHotBox.style.height = nowH + 'px';
+                                currentHotBox.style.top = offTop + 'px';
                             }
                             if (initAttr.direct == 'ne') {
                                 var nowW = parseInt(initAttr.width) + parseInt(moveArea.x);
                                 var nowH = parseInt(initAttr.height) - parseInt(moveArea.y);
                                 var offTop = parseInt(initAttr.top) + parseInt(moveArea.y);
-                                target.parentNode.style.height = nowH + 'px';
-                                target.parentNode.style.top = offTop + 'px';
-                                target.parentNode.style.width = nowW + 'px';
+                                currentHotBox.style.height = nowH + 'px';
+                                currentHotBox.style.top = offTop + 'px';
+                                currentHotBox.style.width = nowW + 'px';
                             }
                             if (initAttr.direct == 'nw') {
                                 var nowH = parseInt(initAttr.height) - parseInt(moveArea.y);
                                 var offTop = parseInt(initAttr.top) + parseInt(moveArea.y);
                                 var nowW = parseInt(initAttr.width) - parseInt(moveArea.x);
                                 var offLeft = parseInt(initAttr.left) + parseInt(moveArea.x);
-                                target.parentNode.style.width = nowW + 'px';
-                                target.parentNode.style.left = offLeft + 'px';
-                                target.parentNode.style.height = nowH + 'px';
-                                target.parentNode.style.top = offTop + 'px';
+                                currentHotBox.style.width = nowW + 'px';
+                                currentHotBox.style.left = offLeft + 'px';
+                                currentHotBox.style.height = nowH + 'px';
+                                currentHotBox.style.top = offTop + 'px';
                             }
                             if (initAttr.direct == 'sw') {
                                 var nowH = parseInt(initAttr.height) + parseInt(moveArea.y);
                                 var nowW = parseInt(initAttr.width) - parseInt(moveArea.x);
                                 var offLeft = parseInt(initAttr.left) + parseInt(moveArea.x);
-                                target.parentNode.style.height = nowH + 'px';
-                                target.parentNode.style.width = nowW + 'px';
-                                target.parentNode.style.left = offLeft + 'px';
+                                currentHotBox.style.height = nowH + 'px';
+                                currentHotBox.style.width = nowW + 'px';
+                                currentHotBox.style.left = offLeft + 'px';
                             }
                             if (initAttr.direct == 'se') {
                                 var nowW = parseInt(initAttr.width) + parseInt(moveArea.x);
                                 var nowH = parseInt(initAttr.height) + parseInt(moveArea.y);
-                                target.parentNode.style.width = nowW + 'px';
-                                target.parentNode.style.height = nowH + 'px';
+                                currentHotBox.style.width = nowW + 'px';
+                                currentHotBox.style.height = nowH + 'px';
                             }
                         }
                     }
@@ -383,10 +385,8 @@
             });
 
             function removeOtherActive() {
-                var allBox = container.querySelectorAll('.hot-crop-box');
-                for(var i = 0; i < allBox.length; i++) {
-                    allBox[i].classList.remove('active');
-                }
+                var active = container.querySelector('.hot-crop-box.active');
+                active && active.classList.remove('active');
             }
         }
     };
