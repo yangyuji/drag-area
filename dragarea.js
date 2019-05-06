@@ -78,6 +78,10 @@
                 currentHotBox = null,
                 newHotBox = null;
 
+            if(!container || !hotbox) {
+                return
+            }
+
             container.addEventListener('mousedown', function(e) {
 
                 e.stopImmediatePropagation();
